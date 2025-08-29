@@ -6,18 +6,28 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { icon: Home, label: 'Accueil', href: '#home' },
-    { icon: Image, label: 'Photos', href: '#gallery' },
-    { icon: Video, label: 'Vidéos', href: '#videos' },
-    { icon: Music, label: 'Audio', href: '#audio' },
-    { icon: BookOpen, label: 'Biographie', href: '#biography' },
-    { icon: Phone, label: 'Contact', href: '#contact' }
+    { icon: Home, label: 'Accueil', href: '/' },
+    { icon: Image, label: 'Photos', href: '/photos' },
+    { icon: Video, label: 'Vidéos', href: '/videos' },
+    { icon: Music, label: 'Audio', href: '/audio' },
+    { icon: BookOpen, label: 'Biographie', href: '/biographie' },
+    { icon: Phone, label: 'Contact', href: '/#contact' }
   ];
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const handleNavigation = (href: string) => {
+    if (href.startsWith('/#')) {
+      // Handle anchor links on home page
+      if (window.location.pathname !== '/') {
+        window.location.href = href;
+      } else {
+        const element = document.querySelector(href.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    } else {
+      // Handle page navigation
+      window.location.href = href;
     }
     setIsMenuOpen(false);
   };
@@ -41,7 +51,7 @@ const Navigation = () => {
             {navItems.map((item, index) => (
               <button
                 key={index}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => handleNavigation(item.href)}
                 className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-smooth group"
               >
                 <item.icon className="w-4 h-4 group-hover:scale-110 transition-bounce" />
@@ -68,7 +78,7 @@ const Navigation = () => {
               {navItems.map((item, index) => (
                 <button
                   key={index}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavigation(item.href)}
                   className="flex items-center space-x-3 w-full text-left px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-smooth"
                 >
                   <item.icon className="w-5 h-5" />
