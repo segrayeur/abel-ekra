@@ -70,9 +70,18 @@ const Hero = () => {
 
           {/* Description */}
           <div className="animate-fade-in-delay" style={{animationDelay: '0.6s'}}>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto lg:mx-0 leading-relaxed">
-              Homme de qualité et d'intégrité, de délivrance et de miracles, l'évangéliste et prophète Abel Ekra est le président du ministère <span className="text-primary font-semibold">LADÉ</span> et le visionnaire du séminaire <span className="text-accent font-semibold">BARA</span> qui pendant 3 ans n'a cessé de transformer et d'impacter le corps de Christ.
-            </p>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 mb-8 max-w-4xl mx-auto lg:mx-0">
+              <p className="text-xl md:text-2xl font-medium text-white leading-relaxed text-center lg:text-left">
+                <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent font-bold">
+                  Homme de qualité et d'intégrité, de délivrance et de miracles
+                </span>, 
+                l'évangéliste et prophète <span className="text-accent font-bold">Abel Ekra</span> est le président du ministère{' '}
+                <span className="bg-primary/20 text-primary font-bold px-2 py-1 rounded-md">LADÉ</span>{' '}
+                et le visionnaire du séminaire{' '}
+                <span className="bg-accent/20 text-accent font-bold px-2 py-1 rounded-md">BARA</span>{' '}
+                qui pendant 3 ans n'a cessé de transformer et d'impacter le corps de Christ.
+              </p>
+            </div>
           </div>
 
           {/* CTA Buttons */}

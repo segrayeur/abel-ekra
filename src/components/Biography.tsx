@@ -106,12 +106,18 @@ const Biography = () => {
               </div>
 
               <div className="prose prose-lg max-w-none">
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  <strong className="text-primary">Homme de qualité et d'intégrité, de délivrance et de miracles</strong>, 
-                  l'évangéliste et prophète Abel Ekra est le président du ministère <strong className="text-secondary">LADÉ</strong> 
-                  et le visionnaire du séminaire <strong className="text-accent">BARA</strong> qui pendant 3 ans n'a cessé 
-                  de transformer et d'impacter le corps de Christ.
-                </p>
+                <div className="bg-gradient-to-br from-primary/10 to-accent/10 border-l-4 border-primary rounded-r-xl p-6 mb-8">
+                  <p className="text-lg leading-relaxed text-foreground font-medium">
+                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      Homme de qualité et d'intégrité, de délivrance et de miracles
+                    </span>, 
+                    l'évangéliste et prophète <span className="text-accent font-bold text-xl">Abel Ekra</span> est le président du ministère{' '}
+                    <span className="bg-primary text-primary-foreground font-bold px-3 py-1 rounded-full text-sm">LADÉ</span>{' '}
+                    et le visionnaire du séminaire{' '}
+                    <span className="bg-accent text-accent-foreground font-bold px-3 py-1 rounded-full text-sm">BARA</span>{' '}
+                    qui pendant 3 ans n'a cessé de transformer et d'impacter le corps de Christ.
+                  </p>
+                </div>
 
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   <strong className="text-primary">Amoureux des âmes et du prophétique</strong>, il continue depuis 
