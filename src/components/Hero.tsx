@@ -43,13 +43,13 @@ const Hero = () => {
           
           {/* Main Title */}
           <div className="animate-slide-up">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Abel Fabrice
+                Pasteur Abel Fabrice Ekra
               </span>
               <br />
-              <span className="text-foreground animate-glow">
-                Ekra
+              <span className="text-foreground animate-glow text-xl md:text-3xl lg:text-4xl">
+                Leader des jeunes de l'église Chapel International de Yopougon en Côte d'ivoire et le visionnaire du séminaire BARA en Côte d'ivoire
               </span>
             </h1>
           </div>
