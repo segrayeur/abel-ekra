@@ -3,6 +3,28 @@ import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Play } from 'lucide-react';
 
 const VideoGallery = () => {
+  // Vidéos TikTok spécifiques d'Abel Fabrice Ekra
+  const tiktokVideos = [
+    {
+      id: "7486104899072150790",
+      url: "https://www.tiktok.com/@abelfabriceekra/video/7486104899072150790",
+      title: "Message spirituel inspirant",
+      description: "Enseignement sur la foi et la transformation"
+    },
+    {
+      id: "7486837785354145029", 
+      url: "https://www.tiktok.com/@abelfabriceekra/video/7486837785354145029",
+      title: "Prédication puissante",
+      description: "Message de délivrance et de miracles"
+    },
+    {
+      id: "7542886098343628037",
+      url: "https://www.tiktok.com/@abelfabriceekra/video/7542886098343628037", 
+      title: "Témoignage de foi",
+      description: "Partage d'expérience spirituelle édifiante"
+    }
+  ];
+
   const socialMediaEmbeds = [
     {
       platform: "TikTok",
@@ -80,6 +102,67 @@ const VideoGallery = () => {
               </Badge>
             </div>
           ))}
+        </div>
+
+        {/* Vidéos TikTok Récentes */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                Dernières Vidéos TikTok
+              </span>
+            </h3>
+            <p className="text-muted-foreground">Messages récents et enseignements spirituels</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {tiktokVideos.map((video, index) => (
+              <div
+                key={video.id}
+                className="group relative overflow-hidden rounded-2xl shadow-spiritual hover:shadow-glow transition-smooth animate-slide-up"
+                style={{animationDelay: `${index * 0.1}s`}}
+              >
+                <div className="relative p-6 card-gradient border">
+                  {/* Video Thumbnail/Player Area */}
+                  <div className="relative aspect-[9/16] bg-gradient-to-br from-pink-500/20 to-purple-600/20 rounded-xl overflow-hidden group/video mb-4">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Button
+                        size="lg"
+                        onClick={() => window.open(video.url, '_blank')}
+                        className="spiritual-gradient shadow-glow group-hover/video:scale-110 transition-bounce"
+                      >
+                        <Play className="w-6 h-6 mr-2" />
+                        Regarder
+                      </Button>
+                    </div>
+                    
+                    {/* TikTok branding */}
+                    <div className="absolute top-4 left-4 flex items-center space-x-2">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
+                        T
+                      </div>
+                      <span className="text-xs text-white font-medium bg-black/50 px-2 py-1 rounded">TikTok</span>
+                    </div>
+                  </div>
+
+                  {/* Video Info */}
+                  <div className="space-y-3">
+                    <h4 className="text-lg font-semibold text-primary line-clamp-2">{video.title}</h4>
+                    <p className="text-sm text-muted-foreground line-clamp-2">{video.description}</p>
+                    
+                    <Button
+                      variant="outline"
+                      onClick={() => window.open(video.url, '_blank')}
+                      className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Ouvrir sur TikTok
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Social Media Integration */}
