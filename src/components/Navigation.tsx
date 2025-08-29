@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Home, Image, Video, Music, BookOpen, Phone, MessageCircle } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { icon: Home, label: 'Accueil', href: '/' },
@@ -17,7 +19,7 @@ const Navigation = () => {
   const handleNavigation = (href: string) => {
     if (href.startsWith('/#')) {
       // Handle anchor links on home page
-      if (window.location.pathname !== '/') {
+      if (location.pathname !== '/') {
         window.location.href = href;
       } else {
         const element = document.querySelector(href.substring(1));
@@ -25,9 +27,6 @@ const Navigation = () => {
           element.scrollIntoView({ behavior: 'smooth' });
         }
       }
-    } else {
-      // Handle page navigation
-      window.location.href = href;
     }
     setIsMenuOpen(false);
   };
@@ -37,26 +36,37 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 rounded-full spiritual-gradient flex items-center justify-center animate-glow">
               <span className="text-white font-bold text-lg">AE</span>
             </div>
             <span className="hidden md:block font-bold text-xl bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Abel Fabrice Ekra
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => handleNavigation(item.href)}
-                className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-smooth group"
-              >
-                <item.icon className="w-4 h-4 group-hover:scale-110 transition-bounce" />
-                <span className="font-medium">{item.label}</span>
-              </button>
+              item.href.startsWith('/#') ? (
+                <button
+                  key={index}
+                  onClick={() => handleNavigation(item.href)}
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-smooth group"
+                >
+                  <item.icon className="w-4 h-4 group-hover:scale-110 transition-bounce" />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ) : (
+                <Link
+                  key={index}
+                  to={item.href}
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-smooth group"
+                >
+                  <item.icon className="w-4 h-4 group-hover:scale-110 transition-bounce" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              )
             ))}
           </div>
 
@@ -76,14 +86,26 @@ const Navigation = () => {
           <div className="md:hidden border-t bg-background/95 backdrop-blur-md animate-slide-up">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleNavigation(item.href)}
-                  className="flex items-center space-x-3 w-full text-left px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-smooth"
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </button>
+                item.href.startsWith('/#') ? (
+                  <button
+                    key={index}
+                    onClick={() => handleNavigation(item.href)}
+                    className="flex items-center space-x-3 w-full text-left px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-smooth"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </button>
+                ) : (
+                  <Link
+                    key={index}
+                    to={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-3 w-full text-left px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5 transition-smooth"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                )
               ))}
             </div>
           </div>

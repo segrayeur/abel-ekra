@@ -6,6 +6,7 @@ import FloatingWidgets from '@/components/FloatingWidgets';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Camera, Video, Music, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   const sections = [
@@ -77,9 +78,11 @@ const Index = () => {
                     </p>
                     <Button 
                       className="w-full spiritual-gradient hover:scale-105 transition-bounce"
-                      onClick={() => window.location.href = section.link}
+                      asChild
                     >
-                      Découvrir
+                      <Link to={section.link}>
+                        Découvrir
+                      </Link>
                     </Button>
                   </CardContent>
                 </Card>
