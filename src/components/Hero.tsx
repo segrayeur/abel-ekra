@@ -49,7 +49,7 @@ const Hero = () => {
               </span>
               <br />
               <span className="text-foreground animate-glow text-xl md:text-3xl lg:text-4xl">
-                Leader des jeunes de l'église Chapel International de Yopougon en Côte d'ivoire et le visionnaire du séminaire BARA en Côte d'ivoire
+                Leader du Ministère LADÉ en Côte d'Ivoire
               </span>
             </h1>
           </div>

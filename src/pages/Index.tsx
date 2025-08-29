@@ -51,12 +51,15 @@ const Index = () => {
           <div className="text-center mb-16 animate-slide-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Explorez le Ministère
+                Séminaire BARA : un mouvement d'impact chrétien
               </span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Découvrez toutes les facettes du ministère d'Abel Fabrice Ekra à travers nos différentes sections
-            </p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-secondary">
+              Coach, Entrepreneur et Prophète
+            </h2>
+            <h3 className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              Découvrez ses vidéos, podcasts et enseignements
+            </h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
