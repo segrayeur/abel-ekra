@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Phone, 
   MessageCircle, 
@@ -22,17 +23,51 @@ const Contact = () => {
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
+    phone: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message envoyé !",
-      description: "Nous vous répondrons dans les plus brefs délais.",
-    });
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert({
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+          phone: formData.phone.trim() || null
+        });
+
+      if (error) {
+        console.error('Erreur lors de l\'envoi:', error);
+        toast({
+          title: "Erreur",
+          description: "Une erreur s'est produite lors de l'envoi. Veuillez réessayer.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Message envoyé !",
+          description: "Nous vous répondrons dans les plus brefs délais.",
+        });
+        setFormData({ name: '', email: '', subject: '', message: '', phone: '' });
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite. Veuillez réessayer.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -154,6 +189,18 @@ const Contact = () => {
                         className="transition-smooth focus:ring-2 focus:ring-primary"
                       />
                     </div>
+
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Téléphone (optionnel)</label>
+                      <Input
+                        name="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="+225 0757 48 03 17"
+                        className="transition-smooth focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
                     
                     <div>
                       <label className="text-sm font-medium mb-2 block">Message</label>
@@ -170,10 +217,11 @@ const Contact = () => {
                     
                     <Button 
                       type="submit" 
-                      className="w-full spiritual-gradient hover:scale-105 transition-bounce text-white font-semibold py-3"
+                      disabled={isSubmitting}
+                      className="w-full spiritual-gradient hover:scale-105 transition-bounce text-white font-semibold py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Send className="w-4 h-4 mr-2" />
-                      Envoyer le Message
+                      {isSubmitting ? 'Envoi en cours...' : 'Envoyer le Message'}
                     </Button>
                   </form>
                 </CardContent>
