@@ -35,47 +35,74 @@ const Gallery = () => {
     {
       src: "/lovable-uploads/0b2b9071-159f-4de4-9703-9e080ec9976a.png",
       alt: "Abel Fabrice Ekra avec son équipe",
-      category: "Équipe"
+      category: "Équipe",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/64aa1a73-7b7a-47eb-aee1-bf9bafa9b402.png", 
       alt: "Séminaire et formation",
-      category: "Formation"
+      category: "Formation",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/d6dcb6a9-5f5e-4bad-8541-2269cc7ae657.png",
       alt: "Événement ministériel",
-      category: "Événement"
+      category: "Événement",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/f163ef52-7f5d-4eff-9a59-07f9ee9e1787.png",
       alt: "Moment de prédication",
-      category: "Prédication"
+      category: "Prédication",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/99ddb8ed-4bc0-4f9d-beea-3fa0fb683523.png",
       alt: "Abel Fabrice Ekra en action",
-      category: "Ministère"
+      category: "Ministère",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/fad91b84-bf23-47c6-b0a2-681e6b8c638e.png",
       alt: "Conférence spirituelle",
-      category: "Conférence"
+      category: "Conférence",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/7bc07e4f-c190-4b8a-984b-620e78ef8966.png",
       alt: "Média et interview",
-      category: "Média"
+      category: "Média",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/a1f224e8-7c76-448d-b698-160f36e46932.png",
       alt: "Intervention publique",
-      category: "Public"
+      category: "Public",
+      title: undefined,
+      description: undefined,
+      date: undefined
     },
     {
       src: "/lovable-uploads/e6076b8f-9dc0-46f8-bbd7-419a3ff88b03.png",
       alt: "Portrait officiel",
-      category: "Portrait"
+      category: "Portrait",
+      title: undefined,
+      description: undefined,
+      date: undefined
     }
   ];
 
@@ -83,7 +110,10 @@ const Gallery = () => {
   const adminImages = adminPhotos.map(photo => ({
     src: photo.file_url,
     alt: photo.description || photo.title,
-    category: photo.tags?.[0] || 'Admin'
+    category: photo.tags?.[0] || 'Admin',
+    title: photo.title,
+    description: photo.description,
+    date: photo.created_at
   }));
 
   const allImages = [...galleryImages, ...adminImages];
@@ -129,14 +159,14 @@ const Gallery = () => {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredImages.map((image, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-2xl shadow-spiritual hover:shadow-glow transition-smooth animate-slide-up card-gradient"
+              className="group relative overflow-hidden rounded-xl shadow-spiritual hover:shadow-glow transition-smooth animate-slide-up card-gradient"
               style={{animationDelay: `${index * 0.1}s`}}
             >
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="aspect-square overflow-hidden">
                 <img
                   src={image.src}
                   alt={image.alt}
@@ -145,20 +175,31 @@ const Gallery = () => {
               </div>
               
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-smooth flex items-end justify-between p-4">
-                <div>
-                  <Badge variant="secondary" className="mb-2 bg-secondary/90">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-smooth flex flex-col justify-end p-3">
+                <div className="space-y-2">
+                  <Badge variant="secondary" className="text-xs bg-secondary/90 w-fit">
                     {image.category}
                   </Badge>
-                  <p className="text-white text-sm font-medium">{image.alt}</p>
+                  {image.title && (
+                    <h4 className="text-white text-sm font-semibold line-clamp-1">{image.title}</h4>
+                  )}
+                  <p className="text-white/90 text-xs line-clamp-2">{image.alt}</p>
+                  {image.description && image.description !== image.alt && (
+                    <p className="text-white/70 text-xs line-clamp-1">{image.description}</p>
+                  )}
+                  {image.date && (
+                    <p className="text-white/60 text-xs">
+                      {new Date(image.date).toLocaleDateString('fr-FR')}
+                    </p>
+                  )}
                 </div>
                 <Button
                   size="icon"
                   variant="secondary"
-                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30"
+                  className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 w-8 h-8"
                   onClick={() => setSelectedImage(image.src)}
                 >
-                  <ZoomIn className="w-4 h-4 text-white" />
+                  <ZoomIn className="w-3 h-3 text-white" />
                 </Button>
               </div>
             </div>
