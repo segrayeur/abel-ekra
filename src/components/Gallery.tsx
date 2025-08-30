@@ -1,11 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ZoomIn, X } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [adminPhotos, setAdminPhotos] = useState<any[]>([]);
+  const { toast } = useToast();
+
+  // Charger les photos admin depuis Supabase
+  useEffect(() => {
+    const fetchAdminPhotos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('media')
+          .select('*')
+          .eq('media_type', 'image')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setAdminPhotos(data || []);
+      } catch (error) {
+        console.error('Error fetching admin photos:', error);
+      }
+    };
+
+    fetchAdminPhotos();
+  }, []);
 
   const galleryImages = [
     {
@@ -55,12 +79,21 @@ const Gallery = () => {
     }
   ];
 
-  const categories = ["Tous", ...Array.from(new Set(galleryImages.map(img => img.category)))];
+  // Combiner les images statiques et les photos admin
+  const adminImages = adminPhotos.map(photo => ({
+    src: photo.file_url,
+    alt: photo.description || photo.title,
+    category: photo.tags?.[0] || 'Admin'
+  }));
+
+  const allImages = [...galleryImages, ...adminImages];
+
+  const categories = ["Tous", ...Array.from(new Set(allImages.map(img => img.category)))];
   const [activeCategory, setActiveCategory] = useState("Tous");
 
   const filteredImages = activeCategory === "Tous" 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === activeCategory);
+    ? allImages 
+    : allImages.filter(img => img.category === activeCategory);
 
   return (
     <section id="gallery" className="py-20 bg-gradient-to-b from-background to-muted/30">

@@ -1,8 +1,32 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Play } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const VideoGallery = () => {
+  const [adminVideos, setAdminVideos] = useState<any[]>([]);
+
+  // Charger les vidéos admin depuis Supabase
+  useEffect(() => {
+    const fetchAdminVideos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('media')
+          .select('*')
+          .eq('media_type', 'video')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setAdminVideos(data || []);
+      } catch (error) {
+        console.error('Error fetching admin videos:', error);
+      }
+    };
+
+    fetchAdminVideos();
+  }, []);
+
   // Vidéos TikTok spécifiques d'Abel Fabrice Ekra
   const tiktokVideos = [
     {
@@ -164,6 +188,70 @@ const VideoGallery = () => {
             ))}
           </div>
         </div>
+
+        {/* Vidéos ajoutées par l'administrateur */}
+        {adminVideos.length > 0 && (
+          <div className="mb-16">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Autres Vidéos
+                </span>
+              </h3>
+              <p className="text-muted-foreground">Vidéos et enseignements ajoutés par l'administrateur</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {adminVideos.map((video, index) => (
+                <div
+                  key={video.id}
+                  className="group relative overflow-hidden rounded-2xl shadow-spiritual hover:shadow-glow transition-smooth animate-slide-up"
+                  style={{animationDelay: `${index * 0.1}s`}}
+                >
+                  <div className="relative p-6 card-gradient border">
+                    {/* Video Thumbnail/Player Area */}
+                    <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl overflow-hidden group/video mb-4">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Button
+                          size="lg"
+                          onClick={() => window.open(video.file_url, '_blank')}
+                          className="spiritual-gradient shadow-glow group-hover/video:scale-110 transition-bounce"
+                        >
+                          <Play className="w-6 h-6 mr-2" />
+                          Regarder
+                        </Button>
+                      </div>
+                      
+                      {/* Category badge */}
+                      <div className="absolute top-4 left-4">
+                        <Badge className="bg-primary/20 text-primary">
+                          {video.tags?.[0] || 'Vidéo'}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Video Info */}
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-semibold text-primary line-clamp-2">{video.title}</h4>
+                      {video.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">{video.description}</p>
+                      )}
+                      
+                      <Button
+                        variant="outline"
+                        onClick={() => window.open(video.file_url, '_blank')}
+                        className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Regarder la vidéo
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Social Media Integration */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
