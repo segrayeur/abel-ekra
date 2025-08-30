@@ -11,6 +11,30 @@ const AudioPlayer = () => {
 
   const audioTracks = [
     {
+      title: "La Foi au Quotidien",
+      description: "Audio extrait de vidéo TikTok - Message inspirant sur la foi quotidienne",
+      duration: "3:45",
+      category: "TikTok",
+      date: "2024-01-20",
+      source: "https://www.tiktok.com/@abelfabriceekra/video/7486104899072150790"
+    },
+    {
+      title: "Transformation Spirituelle",
+      description: "Audio extrait de vidéo TikTok - Témoignage de transformation",
+      duration: "2:15",
+      category: "TikTok",
+      date: "2024-01-18",
+      source: "https://www.tiktok.com/@abelfabriceekra/video/7486837785354145029"
+    },
+    {
+      title: "Miracle et Délivrance",
+      description: "Audio extrait de vidéo TikTok - Message sur les miracles de Dieu",
+      duration: "4:30",
+      category: "TikTok",
+      date: "2024-01-15",
+      source: "https://www.tiktok.com/@abelfabriceekra/video/7536265953848429880"
+    },
+    {
       title: "La Puissance de la Foi",
       description: "Prédication sur l'importance de la foi dans nos vies",
       duration: "45:30",
@@ -77,6 +101,7 @@ const AudioPlayer = () => {
 
   const getCategoryColor = (category: string) => {
     const colors = {
+      'TikTok': 'bg-pink-500/20 text-pink-700',
       'Prédication': 'bg-primary/20 text-primary',
       'Témoignage': 'bg-secondary/20 text-secondary-foreground',
       'Formation': 'bg-accent/20 text-accent-foreground',

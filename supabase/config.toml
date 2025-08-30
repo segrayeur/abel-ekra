@@ -1,1 +1,4 @@
 project_id = "wosnmsdvgpmdtuipgkot"
+
+[functions.tiktok-to-audio]
+verify_jwt = false
