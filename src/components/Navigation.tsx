@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Home, Image, Video, Music, BookOpen, Phone, MessageCircle } from 'lucide-react';
+import { Menu, X, Home, Image, Video, Music, BookOpen, Phone, MessageCircle, HelpCircle } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
@@ -13,6 +13,7 @@ const Navigation = () => {
     { icon: Video, label: 'Vidéos', href: '/videos' },
     { icon: Music, label: 'Audio', href: '/audio' },
     { icon: BookOpen, label: 'Biographie', href: '/biographie' },
+    { icon: HelpCircle, label: 'FAQ', href: '/faq' },
     { icon: Phone, label: 'Contact', href: '/#contact' }
   ];
 
