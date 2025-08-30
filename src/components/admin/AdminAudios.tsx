@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Upload, Calendar, Music, Trash2, Play } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -96,7 +96,15 @@ const AdminAudios = () => {
         .from('audio')
         .upload(filePath, newAudio.file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        toast({
+          title: "Erreur d'upload",
+          description: `Erreur lors de l'upload: ${uploadError.message}`,
+          variant: "destructive"
+        });
+        throw uploadError;
+      }
 
       // Obtenir l'URL publique
       const { data: { publicUrl } } = supabase.storage
@@ -217,6 +225,9 @@ const AdminAudios = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Ajouter un nouveau fichier audio</DialogTitle>
+              <DialogDescription>
+                Remplissez les informations ci-dessous pour ajouter un nouveau fichier audio à votre collection.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">

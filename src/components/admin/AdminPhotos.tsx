@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Plus, Upload, Calendar, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -85,15 +85,12 @@ const AdminPhotos = () => {
         .upload(filePath, newPhoto.file);
 
       if (uploadError) {
-        // Si le bucket n'existe pas, le créer
-        if (uploadError.message.includes('not found')) {
-          toast({
-            title: "Configuration requise",
-            description: "Le bucket de stockage doit être configuré. Contactez l'administrateur système.",
-            variant: "destructive"
-          });
-          return;
-        }
+        console.error('Upload error:', uploadError);
+        toast({
+          title: "Erreur d'upload",
+          description: `Erreur lors de l'upload: ${uploadError.message}`,
+          variant: "destructive"
+        });
         throw uploadError;
       }
 
@@ -192,6 +189,9 @@ const AdminPhotos = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Ajouter une nouvelle photo</DialogTitle>
+              <DialogDescription>
+                Remplissez les informations ci-dessous pour ajouter une nouvelle photo à votre galerie.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">

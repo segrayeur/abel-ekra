@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Upload, Calendar, Video, Trash2, Play } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -97,15 +97,12 @@ const AdminVideos = () => {
         .upload(filePath, newVideo.file);
 
       if (uploadError) {
-        // Si le bucket n'existe pas, afficher un message d'information
-        if (uploadError.message.includes('not found')) {
-          toast({
-            title: "Configuration requise",
-            description: "Le bucket de stockage vidéo doit être configuré. Contactez l'administrateur système.",
-            variant: "destructive"
-          });
-          return;
-        }
+        console.error('Upload error:', uploadError);
+        toast({
+          title: "Erreur d'upload",
+          description: `Erreur lors de l'upload: ${uploadError.message}`,
+          variant: "destructive"
+        });
         throw uploadError;
       }
 
@@ -217,6 +214,9 @@ const AdminVideos = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Ajouter une nouvelle vidéo</DialogTitle>
+              <DialogDescription>
+                Remplissez les informations ci-dessous pour ajouter une nouvelle vidéo à votre collection.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
