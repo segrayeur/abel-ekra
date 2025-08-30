@@ -76,7 +76,7 @@ const Contact = () => {
       icon: MessageCircle,
       title: "WhatsApp",
       description: "Chat instantané",
-      action: () => window.open('https://wa.me/2250757480317'),
+      action: () => window.open('https://wa.me/2250757480317?text=Bonjour%2C%20bienvenue%2C%20b%C3%A9nie%20de%20Dieu.%20Comment%20puis-je%20t%27aider%20%3F'),
       color: "text-green-600 bg-green-50"
     },
     {

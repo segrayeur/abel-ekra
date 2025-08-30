@@ -11,7 +11,7 @@ const Hero = () => {
   ];
 
   const handleWhatsApp = () => {
-    window.open('https://wa.me/2250757480317', '_blank');
+    window.open('https://wa.me/2250757480317?text=Bonjour%2C%20bienvenue%2C%20b%C3%A9nie%20de%20Dieu.%20Comment%20puis-je%20t%27aider%20%3F', '_blank');
   };
 
   const handleCall = () => {
