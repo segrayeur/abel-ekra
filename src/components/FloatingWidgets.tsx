@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MessageCircle, X, Send, Bot, Phone, Brain, Settings } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, Phone, Brain } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/components/ui/use-toast';
 
 const FloatingWidgets = () => {
+  const { toast } = useToast();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
@@ -12,8 +15,6 @@ const FloatingWidgets = () => {
     { role: 'assistant', content: 'Bonjour ! Je suis l\'assistant IA d\'Abel Fabrice Ekra. Posez-moi toutes vos questions spirituelles ! 🤖✨' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai_api_key') || '');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
 
   const handleWhatsApp = () => {
     window.open('https://wa.me/2250757480317?text=Bonjour%2C%20bienvenue%2C%20b%C3%A9nie%20de%20Dieu.%20Comment%20puis-je%20t%27aider%20%3F', '_blank');
@@ -35,16 +36,9 @@ const FloatingWidgets = () => {
     }
   };
 
-  const handleApiKeySubmit = () => {
-    if (apiKey.trim()) {
-      localStorage.setItem('openai_api_key', apiKey);
-      setShowApiKeyInput(false);
-    }
-  };
-
   const handleAiChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!aiChatMessage.trim() || !apiKey) return;
+    if (!aiChatMessage.trim()) return;
 
     const userMessage = aiChatMessage.trim();
     setAiChatMessage('');
@@ -55,40 +49,39 @@ const FloatingWidgets = () => {
     setAiMessages(newMessages);
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: 'Tu es l\'assistant spirituel d\'Abel Fabrice Ekra, un homme de Dieu. Réponds avec sagesse, compassion et références bibliques appropriées. Garde tes réponses bienveillantes et édifiantes.'
-            },
-            ...newMessages
-          ],
-          max_tokens: 300,
-          temperature: 0.7
-        })
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: { 
+          message: userMessage,
+          context: aiMessages 
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Erreur API OpenAI');
+      if (error) {
+        throw new Error(error.message || 'Erreur de l\'API');
       }
 
-      const data = await response.json();
-      const assistantMessage = data.choices[0].message.content;
+      if (!data.success) {
+        throw new Error(data.error || 'Erreur inconnue');
+      }
 
-      setAiMessages([...newMessages, { role: 'assistant', content: assistantMessage }]);
+      setAiMessages([...newMessages, { role: 'assistant', content: data.response }]);
+      
+      toast({
+        title: "Message envoyé",
+        description: "L'assistant IA a répondu avec succès",
+      });
     } catch (error) {
       console.error('Erreur:', error);
       setAiMessages([...newMessages, { 
         role: 'assistant', 
-        content: 'Désolé, je rencontre un problème technique. Veuillez vérifier votre clé API ou réessayer plus tard.' 
+        content: 'Désolé, je rencontre un problème technique. Veuillez réessayer plus tard.' 
       }]);
+      
+      toast({
+        title: "Erreur",
+        description: "Impossible d'obtenir une réponse de l'IA",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -157,57 +150,15 @@ const FloatingWidgets = () => {
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                   <Brain className="w-5 h-5" />
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold">Assistant IA OpenAI</h3>
-                  <p className="text-xs opacity-90">Questions spirituelles illimitées</p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowApiKeyInput(!showApiKeyInput)}
-                  className="text-white hover:bg-white/20 p-1 h-auto"
-                >
-                  <Settings className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
+                 <div className="flex-1">
+                   <h3 className="font-semibold">Assistant IA</h3>
+                   <p className="text-xs opacity-90">Questions spirituelles illimitées</p>
+                 </div>
+               </div>
+             </div>
 
-            <CardContent className="p-0">
-              {/* Configuration API Key */}
-              {showApiKeyInput && (
-                <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border-b">
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-xs font-medium text-blue-700 dark:text-blue-300">
-                        Clé API OpenAI
-                      </label>
-                      <div className="flex gap-2 mt-1">
-                        <input
-                          type="password"
-                          value={apiKey}
-                          onChange={(e) => setApiKey(e.target.value)}
-                          placeholder="sk-..."
-                          className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <Button 
-                          onClick={handleApiKeySubmit}
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700"
-                        >
-                          Sauver
-                        </Button>
-                      </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Votre clé API est stockée localement dans votre navigateur. 
-                      <br />
-                      Obtenez votre clé sur platform.openai.com
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Chat Messages */}
+             <CardContent className="p-0">
+               {/* Chat Messages */}
               <div className="p-4 max-h-80 overflow-y-auto space-y-3">
                 {aiMessages.map((message, index) => (
                   <div
@@ -232,43 +183,26 @@ const FloatingWidgets = () => {
                 )}
               </div>
 
-              {/* Chat Input */}
-              <div className="border-t p-3">
-                {apiKey ? (
-                  <form onSubmit={handleAiChatSubmit} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={aiChatMessage}
-                      onChange={(e) => setAiChatMessage(e.target.value)}
-                      placeholder="Posez votre question spirituelle..."
-                      disabled={isLoading}
-                      className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-                    />
-                    <Button 
-                      type="submit" 
-                      size="sm"
-                      disabled={isLoading || !aiChatMessage.trim()}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                    >
-                      <Send className="w-4 h-4" />
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="text-center py-2">
-                    <p className="text-xs text-muted-foreground mb-2">
-                      Configurez votre clé API OpenAI pour commencer
-                    </p>
-                    <Button
-                      onClick={() => setShowApiKeyInput(true)}
-                      size="sm"
-                      variant="outline"
-                      className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Configurer
-                    </Button>
-                  </div>
-                )}
+               {/* Chat Input */}
+               <div className="border-t p-3">
+                 <form onSubmit={handleAiChatSubmit} className="flex gap-2">
+                   <input
+                     type="text"
+                     value={aiChatMessage}
+                     onChange={(e) => setAiChatMessage(e.target.value)}
+                     placeholder="Posez votre question spirituelle..."
+                     disabled={isLoading}
+                     className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                   />
+                   <Button 
+                     type="submit" 
+                     size="sm"
+                     disabled={isLoading || !aiChatMessage.trim()}
+                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                   >
+                     <Send className="w-4 h-4" />
+                   </Button>
+                 </form>
                 
                 <div className="flex items-center justify-between mt-2">
                   <p className="text-xs text-muted-foreground">
