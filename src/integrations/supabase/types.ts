@@ -14,471 +14,348 @@ export type Database = {
   }
   public: {
     Tables: {
-      categories: {
+      coaching_sessions: {
         Row: {
-          active: boolean | null
-          created_at: string | null
+          client_name: string
+          created_at: string
+          email: string
           id: string
-          name: string
-          name_en: string
-          subcategories: Json | null
-          subcategories_en: Json | null
+          message: string | null
+          phone: string | null
+          preferred_date: string | null
+          session_type: string
+          status: Database["public"]["Enums"]["request_status"] | null
+          updated_at: string
         }
         Insert: {
-          active?: boolean | null
-          created_at?: string | null
+          client_name: string
+          created_at?: string
+          email: string
           id?: string
-          name: string
-          name_en: string
-          subcategories?: Json | null
-          subcategories_en?: Json | null
+          message?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          session_type: string
+          status?: Database["public"]["Enums"]["request_status"] | null
+          updated_at?: string
         }
         Update: {
-          active?: boolean | null
-          created_at?: string | null
+          client_name?: string
+          created_at?: string
+          email?: string
           id?: string
-          name?: string
-          name_en?: string
-          subcategories?: Json | null
-          subcategories_en?: Json | null
+          message?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          session_type?: string
+          status?: Database["public"]["Enums"]["request_status"] | null
+          updated_at?: string
         }
         Relationships: []
       }
-      conversations: {
+      contact_messages: {
         Row: {
-          created_at: string | null
+          created_at: string
+          email: string
           id: string
-          last_message: string | null
-          last_message_time: string | null
-          provider_id: string | null
-          service_request_id: string | null
-          status: string | null
-          user_id: string | null
+          message: string
+          name: string
+          phone: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          subject: string
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
+          email: string
           id?: string
-          last_message?: string | null
-          last_message_time?: string | null
-          provider_id?: string | null
-          service_request_id?: string | null
-          status?: string | null
-          user_id?: string | null
+          message: string
+          name: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          subject: string
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
+          email?: string
           id?: string
-          last_message?: string | null
-          last_message_time?: string | null
-          provider_id?: string | null
-          service_request_id?: string | null
-          status?: string | null
-          user_id?: string | null
+          message?: string
+          name?: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          created_at: string
+          current_participants: number | null
+          date_end: string | null
+          date_start: string
+          description: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          location: string | null
+          max_participants: number | null
+          registration_link: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_participants?: number | null
+          date_end?: string | null
+          date_start: string
+          description?: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          max_participants?: number | null
+          registration_link?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_participants?: number | null
+          date_end?: string | null
+          date_start?: string
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          max_participants?: number | null
+          registration_link?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      media: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: number | null
+          event_id: string | null
+          featured: boolean | null
+          file_url: string
+          id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          sermon_id: string | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: number | null
+          event_id?: string | null
+          featured?: boolean | null
+          file_url: string
+          id?: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          sermon_id?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: number | null
+          event_id?: string | null
+          featured?: boolean | null
+          file_url?: string
+          id?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+          sermon_id?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "conversations_provider_id_fkey"
-            columns: ["provider_id"]
+            foreignKeyName: "media_event_id_fkey"
+            columns: ["event_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "conversations_service_request_id_fkey"
-            columns: ["service_request_id"]
+            foreignKeyName: "media_sermon_id_fkey"
+            columns: ["sermon_id"]
             isOneToOne: false
-            referencedRelation: "service_requests"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "conversations_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "sermons"
             referencedColumns: ["id"]
           },
         ]
       }
-      messages: {
+      ministry_updates: {
         Row: {
           content: string
-          conversation_id: string | null
-          created_at: string | null
+          created_at: string
+          featured: boolean | null
           id: string
-          read: boolean | null
-          sender_id: string | null
+          image_url: string | null
+          published: boolean | null
+          title: string
+          updated_at: string
         }
         Insert: {
           content: string
-          conversation_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          featured?: boolean | null
           id?: string
-          read?: boolean | null
-          sender_id?: string | null
+          image_url?: string | null
+          published?: boolean | null
+          title: string
+          updated_at?: string
         }
         Update: {
           content?: string
-          conversation_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          featured?: boolean | null
           id?: string
-          read?: boolean | null
-          sender_id?: string | null
+          image_url?: string | null
+          published?: boolean | null
+          title?: string
+          updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "messages_conversation_id_fkey"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "conversations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      notifications: {
+      prayer_requests: {
         Row: {
-          created_at: string | null
-          data: Json | null
+          created_at: string
+          email: string | null
           id: string
           message: string
-          read: boolean | null
-          title: string
-          type: string | null
-          user_id: string | null
+          name: string
+          phone: string | null
+          private: boolean | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          subject: string
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
-          data?: Json | null
+          created_at?: string
+          email?: string | null
           id?: string
           message: string
-          read?: boolean | null
-          title: string
-          type?: string | null
-          user_id?: string | null
+          name: string
+          phone?: string | null
+          private?: boolean | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          subject: string
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
-          data?: Json | null
+          created_at?: string
+          email?: string | null
           id?: string
           message?: string
-          read?: boolean | null
-          title?: string
-          type?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      provider_profiles: {
-        Row: {
-          availability: boolean | null
-          categories: Json | null
-          completed_services: number | null
-          created_at: string | null
-          description: string | null
-          experience: string | null
-          expertise: Json | null
-          id: string
-          id_document: string | null
-          rating: number | null
-          suspended: boolean | null
-          updated_at: string | null
-          user_id: string | null
-          verified: boolean | null
-        }
-        Insert: {
-          availability?: boolean | null
-          categories?: Json | null
-          completed_services?: number | null
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          expertise?: Json | null
-          id?: string
-          id_document?: string | null
-          rating?: number | null
-          suspended?: boolean | null
-          updated_at?: string | null
-          user_id?: string | null
-          verified?: boolean | null
-        }
-        Update: {
-          availability?: boolean | null
-          categories?: Json | null
-          completed_services?: number | null
-          created_at?: string | null
-          description?: string | null
-          experience?: string | null
-          expertise?: Json | null
-          id?: string
-          id_document?: string | null
-          rating?: number | null
-          suspended?: boolean | null
-          updated_at?: string | null
-          user_id?: string | null
-          verified?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "provider_profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reports: {
-        Row: {
-          created_at: string | null
-          description: string
-          id: string
-          reason: string
-          reported_user_id: string | null
-          reporter_id: string | null
-          resolution_note: string | null
-          resolved_at: string | null
-          resolved_by: string | null
-          service_request_id: string | null
-          status: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description: string
-          id?: string
-          reason: string
-          reported_user_id?: string | null
-          reporter_id?: string | null
-          resolution_note?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          service_request_id?: string | null
-          status?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string
-          id?: string
-          reason?: string
-          reported_user_id?: string | null
-          reporter_id?: string | null
-          resolution_note?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          service_request_id?: string | null
-          status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reports_reported_user_id_fkey"
-            columns: ["reported_user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reports_reporter_id_fkey"
-            columns: ["reporter_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reports_resolved_by_fkey"
-            columns: ["resolved_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reports_service_request_id_fkey"
-            columns: ["service_request_id"]
-            isOneToOne: false
-            referencedRelation: "service_requests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reviews: {
-        Row: {
-          comment: string | null
-          created_at: string | null
-          id: string
-          provider_id: string | null
-          rating: number
-          service_request_id: string | null
-          user_id: string | null
-        }
-        Insert: {
-          comment?: string | null
-          created_at?: string | null
-          id?: string
-          provider_id?: string | null
-          rating: number
-          service_request_id?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          comment?: string | null
-          created_at?: string | null
-          id?: string
-          provider_id?: string | null
-          rating?: number
-          service_request_id?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_provider_id_fkey"
-            columns: ["provider_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_service_request_id_fkey"
-            columns: ["service_request_id"]
-            isOneToOne: false
-            referencedRelation: "service_requests"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "reviews_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      service_requests: {
-        Row: {
-          assigned_provider_id: string | null
-          category_id: string | null
-          completed_date: string | null
-          created_at: string | null
-          description: string
-          id: string
-          location: Json
-          price: number | null
-          scheduled_date: string | null
-          status: string | null
-          subcategory: string
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          assigned_provider_id?: string | null
-          category_id?: string | null
-          completed_date?: string | null
-          created_at?: string | null
-          description: string
-          id?: string
-          location: Json
-          price?: number | null
-          scheduled_date?: string | null
-          status?: string | null
-          subcategory: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          assigned_provider_id?: string | null
-          category_id?: string | null
-          completed_date?: string | null
-          created_at?: string | null
-          description?: string
-          id?: string
-          location?: Json
-          price?: number | null
-          scheduled_date?: string | null
-          status?: string | null
-          subcategory?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "service_requests_assigned_provider_id_fkey"
-            columns: ["assigned_provider_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "service_requests_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "service_requests_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      users: {
-        Row: {
-          avatar: string | null
-          city: string
-          commune: string
-          created_at: string | null
-          district: string
-          email: string
-          id: string
-          name: string
-          nationality: string | null
-          password: string
-          phone: string
-          type: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          avatar?: string | null
-          city: string
-          commune: string
-          created_at?: string | null
-          district: string
-          email: string
-          id?: string
-          name: string
-          nationality?: string | null
-          password: string
-          phone: string
-          type?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avatar?: string | null
-          city?: string
-          commune?: string
-          created_at?: string | null
-          district?: string
-          email?: string
-          id?: string
           name?: string
-          nationality?: string | null
-          password?: string
-          phone?: string
-          type?: string | null
-          updated_at?: string | null
+          phone?: string | null
+          private?: boolean | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sermons: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          date_preached: string | null
+          description: string | null
+          duration: number | null
+          featured: boolean | null
+          id: string
+          location: string | null
+          scripture_reference: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          date_preached?: string | null
+          description?: string | null
+          duration?: number | null
+          featured?: boolean | null
+          id?: string
+          location?: string | null
+          scripture_reference?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          date_preached?: string | null
+          description?: string | null
+          duration?: number | null
+          featured?: boolean | null
+          id?: string
+          location?: string | null
+          scripture_reference?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          approved: boolean | null
+          content: string
+          created_at: string
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          location: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          approved?: boolean | null
+          content: string
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          approved?: boolean | null
+          content?: string
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -490,7 +367,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      event_type: "seminar" | "worship" | "conference" | "prayer" | "coaching"
+      media_type: "image" | "video" | "audio" | "document"
+      request_status: "pending" | "in_progress" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -617,6 +496,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      event_type: ["seminar", "worship", "conference", "prayer", "coaching"],
+      media_type: ["image", "video", "audio", "document"],
+      request_status: ["pending", "in_progress", "completed"],
+    },
   },
 } as const
