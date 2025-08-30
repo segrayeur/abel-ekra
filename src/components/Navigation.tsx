@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Home, Image, Video, Music, BookOpen, Phone, MessageCircle, HelpCircle } from 'lucide-react';
+import { Menu, X, Home, Image, Video, Music, BookOpen, Phone, MessageCircle, HelpCircle, Settings } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
@@ -69,17 +69,34 @@ const Navigation = () => {
                 </Link>
               )
             ))}
+            
+            {/* Admin Access Button */}
+            <Link
+              to="/admin"
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary transition-smooth group"
+              title="Accès Administrateur"
+            >
+              <Settings className="w-4 h-4 group-hover:rotate-90 transition-smooth duration-300" />
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center space-x-2">
+            <Link
+              to="/admin"
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 hover:bg-primary/20 text-primary hover:text-primary transition-smooth group"
+              title="Accès Administrateur"
+            >
+              <Settings className="w-4 h-4 group-hover:rotate-90 transition-smooth duration-300" />
+            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
