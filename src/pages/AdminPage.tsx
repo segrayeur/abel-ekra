@@ -70,7 +70,7 @@ const AdminPage = () => {
             </div>
             <CardTitle className="text-2xl font-bold">
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Espace Administrateur
+                Connexion
               </span>
             </CardTitle>
             <p className="text-muted-foreground">Connexion sécurisée requise</p>
