@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Upload, Calendar, Music, Trash2, Play } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +21,7 @@ const AdminAudios = () => {
     file: null as File | null
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteAudioId, setDeleteAudioId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const audioGroups = [
@@ -151,8 +153,6 @@ const AdminAudios = () => {
   };
 
   const deleteAudio = async (audioId: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cet audio ?')) return;
-
     try {
       const { error } = await supabase
         .from('media')
@@ -175,6 +175,8 @@ const AdminAudios = () => {
         description: "Erreur lors de la suppression",
         variant: "destructive"
       });
+    } finally {
+      setDeleteAudioId(null);
     }
   };
 
@@ -361,14 +363,34 @@ const AdminAudios = () => {
                       <Play className="w-4 h-4 mr-2" />
                       Écouter
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteAudio(audio.id)}
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Supprimer cet audio ?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Cette action est irréversible. L'audio sera définitivement supprimé.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Annuler</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteAudio(audio.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Supprimer
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </CardContent>

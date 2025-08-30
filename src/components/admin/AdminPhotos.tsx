@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Plus, Upload, Calendar, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -18,6 +19,7 @@ const AdminPhotos = () => {
     file: null as File | null
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deletePhotoId, setDeletePhotoId] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Charger les photos existantes
@@ -136,8 +138,6 @@ const AdminPhotos = () => {
   };
 
   const deletePhoto = async (photoId: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cette photo ?')) return;
-
     try {
       const { error } = await supabase
         .from('media')
@@ -160,6 +160,8 @@ const AdminPhotos = () => {
         description: "Erreur lors de la suppression",
         variant: "destructive"
       });
+    } finally {
+      setDeletePhotoId(null);
     }
   };
 
@@ -279,14 +281,34 @@ const AdminPhotos = () => {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-semibold text-primary line-clamp-1">{photo.title}</h3>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deletePhoto(photo.id)}
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Supprimer cette photo ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Cette action est irréversible. La photo sera définitivement supprimée.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => deletePhoto(photo.id)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Supprimer
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
                 {photo.description && (
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
