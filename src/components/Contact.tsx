@@ -82,8 +82,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email",
-      description: "contact@abelfabriceekra.com",
-      action: () => window.open('mailto:contact@abelfabriceekra.com'),
+      description: "fabrice.fabrice.ekra@gmail.com",
+      action: () => window.open('mailto:fabrice.fabrice.ekra@gmail.com'),
       color: "text-blue-600 bg-blue-50"
     }
   ];
