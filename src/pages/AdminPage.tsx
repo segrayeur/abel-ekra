@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, LogOut, User, Key } from 'lucide-react';
+import { Shield, LogOut, User, Key, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminPage = () => {
@@ -65,6 +65,14 @@ const AdminPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center">
         <Card className="w-full max-w-md shadow-spiritual">
           <CardHeader className="text-center">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/')}
+              className="absolute top-4 left-4 flex items-center gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Retour
+            </Button>
             <div className="w-16 h-16 mx-auto mb-4 rounded-full spiritual-gradient flex items-center justify-center">
               <Shield className="w-8 h-8 text-white" />
             </div>

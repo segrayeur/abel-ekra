@@ -166,6 +166,8 @@ const AdminAudios = () => {
         description: "Audio supprimé avec succès",
       });
       fetchAudios();
+      // Rechargement automatique de la page
+      setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
       console.error('Error deleting audio:', error);
       toast({

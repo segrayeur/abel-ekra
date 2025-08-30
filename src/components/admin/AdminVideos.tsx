@@ -162,6 +162,8 @@ const AdminVideos = () => {
         description: "Vidéo supprimée avec succès",
       });
       fetchVideos();
+      // Rechargement automatique de la page
+      setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
       console.error('Error deleting video:', error);
       toast({
