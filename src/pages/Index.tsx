@@ -3,6 +3,7 @@ import Hero from '@/components/Hero';
 import Contact from '@/components/Contact';
 import SocialLinks from '@/components/SocialLinks';
 import FloatingWidgets from '@/components/FloatingWidgets';
+import FAQ from '@/components/FAQ';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Camera, Video, Music, BookOpen } from 'lucide-react';
@@ -95,6 +96,7 @@ const Index = () => {
         </div>
       </section>
 
+      <FAQ />
       <SocialLinks />
       <Contact />
       <FloatingWidgets />
